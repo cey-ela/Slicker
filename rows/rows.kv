@@ -1,0 +1,247 @@
+<RowTicker@BoxLayout>
+
+    data: "self.data_generic"
+    index_text: str(self.index + 1)
+    options_root: options_root
+
+    nws: 0.007, 0.392, 0.450, 1
+    brk: 1, 0.258, 0.101, 1
+    sprt: 0.172, 0.541, 0.352, 1
+    ent: 0.254, 0.509, 0.764, 1
+    cont: 0.325, 0.533, 0.780, 1
+    weath: 0.196, 0.372, 0.509, 1
+    blnk: 0,0,0,1
+    cust: 1, 0.949, 0.121, 1
+    whit: 1, 1, 1, 1
+    blk: 0, 0, 0, 1
+
+    LeftColumnContainer:
+        LeftColumn:
+            id: options_root
+            LeftColumnGrid:
+                Up:
+                    on_press: app.move_row_up(root.index), root.close_options(root.options_root)
+                Plus:
+                    on_press: app.add_row(root.index)
+                    on_press: root.close_options(root.options_root)
+                Down:
+                    on_press: app.move_row_down(root.index), root.close_options(root.options_root)
+                Minus:
+                    on_press: app.remove_row(root.index), root.close_options(root.options_root)
+
+            IndexNumber:
+                text: root.index_text
+                on_press: root.row_options(root.options_root)
+
+    CategoryOptions:
+        id: spinner
+        values: root.Category.choices
+        option_cls: 'OptionButton'
+        font_size: 14
+        on_text: app.update_btn_status('update_needed')
+
+        background_color:
+            root.nws if self.text == 'NEWS' else root.brk if self.text == 'BREAKING'  else root.sprt if self.text == \
+            "SPORT" else root.ent if self.text == "ENTS" else root.weath if self.text == "WEATHER" else \
+            root.blk if self.text == "BLANK" else root.cust
+        color:
+            root.whit if self.text == 'NEWS' else root.whit if self.text == 'BREAKING'  else root.whit if self.text == \
+            "SPORT" else root.whit if self.text == "BLANK" else root.whit if self.text == "ENTS" else root.blk
+
+
+        on_text: app.update_data(root.index, 'category', self.text, root.data)
+
+    LimitedTextInput:
+        id: text_input
+        on_text: app.update_data(root.index, 'text', self.text, root.data)
+        on_text: app.spell_check(root.index)
+        on_text: root.close_options(root.options_root)
+        on_text: app.update_btn_status('update_needed')
+        on_focus: app.spell_check(root.index)
+
+    Button:
+        text: 'Aa'
+        size_hint_x: None
+        width: 35
+        on_release: text_input.caps(text_input.text)
+
+    CharCounter:
+        text: str(text_input.char_count)
+        color: (1, 0, 0, 1) if text_input.at_limit else (1, 1, 1, 1)
+
+
+
+<RowBreaking@BoxLayout>
+
+    data: "self.data_breaking"
+    index_text: str(self.index + 1)
+    options_root: options_root
+
+    brk: (1, 0.258, 0.101, 1)
+    blnk: (0,0,0,0.5)
+
+    LeftColumnContainer:
+        LeftColumn:
+            id: options_root
+            LeftColumnGrid:
+                Up:
+                    on_press: app.move_row_up(root.index), root.close_options(root.options_root)
+                Plus:
+                    on_press: app.add_row(root.index)
+                    on_press: root.close_options(root.options_root)
+                Down:
+                    on_press: app.move_row_down(root.index), root.close_options(root.options_root)
+                Minus:
+                    on_press: app.remove_row(root.index), root.close_options(root.options_root)
+
+            IndexNumber:
+                text: root.index_text
+                on_press: root.row_options(root.options_root)
+
+    Button:
+        id: spinner
+        text: "Breaking"
+        size_hint_x: None
+        size_hint_y: 0.99
+        width: dp(100)
+        background_normal: ''
+        background_color: root.brk
+
+    LimitedTextInput:
+        id: text_input
+
+        on_text: app.update_data(root.index, 'text', self.text, root.data)
+        on_text: app.spell_check(root.index)
+        on_text: root.close_options(root.options_root)
+        on_text: app.update_btn_status('update_needed')
+        on_focus: app.spell_check(root.index)
+
+    CharCounter:
+        text: str(text_input.char_count)
+        color: (1, 0, 0, 1) if text_input.at_limit else (1, 1, 1, 1)
+
+
+
+<RowObit@BoxLayout>
+
+    data: "self.data_obit"
+    index_text: str(self.index + 1)
+    options_root: options_root
+
+    obit: (0.5, 0.5, 0.5, 1)
+    blnk: (0,0,0,0.5)
+
+    LeftColumnContainer:
+        LeftColumn:
+            id: options_root
+            LeftColumnGrid:
+                Up:
+                    on_press: app.move_row_up(root.index), root.close_options(root.options_root)
+                Plus:
+                    on_press: app.add_row(root.index)
+                    on_press: root.close_options(root.options_root)
+                Down:
+                    on_press: app.move_row_down(root.index), root.close_options(root.options_root)
+                Minus:
+                    on_press: app.remove_row(root.index), root.close_options(root.options_root)
+
+            IndexNumber:
+                text: root.index_text
+                on_press: root.row_options(root.options_root)
+
+    Button:
+        id: spinner
+        text: "Obit"
+        size_hint_x: None
+        size_hint_y: 0.99
+        width: dp(100)
+        background_normal: ''
+        background_color: root.obit
+
+    LimitedTextInput:
+        id: text_input
+        on_text: app.update_data(root.index, 'text', self.text, root.data)
+        on_text: app.spell_check(root.index)
+        on_text: root.close_options(root.options_root)
+        on_text: app.update_btn_status('update_needed')
+        on_focus: app.spell_check(root.index)
+
+    CharCounter:
+        text: str(text_input.char_count)
+        color: (1, 0, 0, 1) if text_input.at_limit else (1, 1, 1, 1)
+
+
+<CategoryOptions@Spinner>
+    size_hint_x: None
+    size_hint_y: 0.99
+    width: dp(100)
+    background_normal: ''
+
+
+# Custom spinner styling
+<OptionButton@Button>
+    nws: (0.439, 0.772, 0.823, 1)
+    brk: (1, 0.588, 0.501, 1)
+    sprt: (0.584, 0.858, 0.717, 1)
+    ent: (0.666, 0.780, 0.894, 1)
+    cont: 0.552, 0.686, 0.847, 1
+    weath: 0.286, 0.525, 0.713, 1
+    blnk: (0.560, 0.560, 0.560, 1)
+    cust: (0.996, 0.972, 0.603, 1)
+    blk: (0, 0, 0, 1)
+    wht: (1, 1, 1, 1)
+
+    size_hint_y: None
+    height: dp(30)
+    color: (0,0,0,1)
+    font_size: 12.9
+    background_normal: ''
+    background_color:
+        root.nws if self.text == 'NEWS' else root.brk if self.text == 'BREAKING' else root.sprt if self.text == "SPORT"\
+        else root.ent if self.text == "ENTS" else root.blk if self.text == "BLANK" else root.cust
+    color:
+        root.wht if self.text == 'BLANK' else root.blk
+
+<LeftColumnContainer@BoxLayout>
+    size_hint_x: None
+
+<LeftColumn@BoxLayout>
+    #orientation: 'horizontal'
+    size_hint_x: None
+    width: 52
+
+<LeftColumnGrid@GridLayout>
+    size_hint_x: None
+    width: dp(0)
+    cols: 2
+
+<Up@BubbleButton>
+    text: '/\\'
+<Down@BubbleButton>
+    text: '\/'
+<Plus@BubbleButton>
+    text: '+'
+<Minus@BubbleButton>
+    text: '-'
+
+<IndexNumber@Button>
+    size_hint_x: None
+    width: 30
+
+<TitleLabel@Button>
+    size_hint_x: None
+    size_hint_y: 0.99
+    width: dp(100)
+    background_normal: ""
+
+<LimitedTextInput>
+    char_count: len(self.text)
+    at_limit: self.char_count >= self.limit
+    font_size: 16
+    multiline: True
+    write_tab: False
+
+
+<CharCounter@Button>
+    size_hint_x: None
+    width: dp(47)
