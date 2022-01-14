@@ -1,0 +1,193 @@
+#:include rows/rows.kv
+#:include popups/popups.kv
+
+#: set link_generic "self.data_generic"
+#: set btn_generic "self.root.ids.update_btn_generic"
+
+#: set link_breaking "self.data_breaking"
+#: set btn_breaking "self.root.ids.update_btn_breaking"
+
+#: set link_obit "self.data_obit"
+#: set btn_obit "self.root.ids.update_btn_obit"
+
+# WELCOME TO KIVY LANG /.KV
+# This is how every aesthetic part of the program is defined. All layouts, colors, fonts, sizes etc are controlled here
+# Everything works in a tiered structure and is nice to work with once you know how. See the docs for full detail:
+# https://kivy.org/doc/stable/guide/lang.html
+
+# Each tab is defined at the start. Then around line 70 the busy bottom bar gets assembled
+
+VerticalLayout:
+    TabbedPanel:
+        do_default_tab: False
+        # ------------------ TICKER TAB ------------------ #
+        TabbedPanelItem:
+            text: 'GENERIC'
+            on_press: app.set_data_set("self.data_generic")
+            on_press: app.show_contact_weather_btns('generic')
+            VerticalLayout:
+                RowTitles:
+                Rows:
+                    id: generic_rv
+                    data: app.data_generic
+                    viewclass: 'RowTicker'
+
+
+        # ------------------ BREAKING TAB ------------------ #
+
+        TabbedPanelItem:
+            text: 'BREAKING'
+            on_press: app.set_data_set("self.data_breaking")
+            on_press: app.show_contact_weather_btns('breaking')
+            VerticalLayout:
+                RowTitles:
+                Rows:
+                    data: app.data_breaking
+                    viewclass: 'RowBreaking'
+
+
+        # ------------------ OBIT TAB ------------------ #
+
+        TabbedPanelItem:
+            text: 'OBIT'
+            on_press: app.set_data_set("self.data_obit")
+            on_press: app.show_contact_weather_btns('obit')
+            VerticalLayout:
+                RowTitles:
+                Rows:
+                    data: app.data_obit
+                    viewclass: 'RowObit'
+
+
+        # ------------------ BOTTOM BAR ------------------ #
+
+    BoxLayout:
+        size_hint_y: None
+        height: 38
+
+        Button:
+            text: ' ADD \nROW'
+            font_size: 11
+            size_hint_x: None
+            width: 70
+            on_release: app.add_row()
+
+        Button:
+            text: 'REMOVE \n   ROW'
+            font_size: 11
+            size_hint_x: None
+            width: 70
+            on_release: app.popups.delete_row_confirmation(-1)
+
+        Button:
+            text: 'CLEAR \n  ALL'
+            font_size: 11
+            size_hint_x: None
+            width: 70
+            on_release: app.popups.clear_all_confirmation()
+
+        Spinner:
+            size_hint_x: None
+            markup: True
+            width: 300
+            option_cls: 'SpinnerButton'
+            text: 'SPELLCHECK'
+            color: 1, 1, 1, 1
+            id: spell_check_spinner
+            on_press: app.run_spell_check_on_all_text()
+            on_text: app.spinner_choice(self.text)
+
+
+
+        Button:
+
+
+        Button:
+            text: 'UPDATE  DATABASE'
+            font_size: 16
+            size_hint_x: None
+            width: dp(300)
+            id: update_btn_ticker
+            on_release: app.update_dbs(), app.update_btn_status('updated')
+
+        ToggleButton:
+            id: contact_indicator
+            text: 'CONTACT'
+            font_size: 11
+            size_hint_x: None
+            width: 70
+            on_release: app.toggle_contact(self.state)
+
+        ToggleButton:
+            id: weather_indicator
+            text: 'WEATHER'
+            font_size: 11
+            size_hint_x: None
+            width: 70
+            on_release: app.toggle_weather(self.state)
+
+        Button:
+            text: 'SETTINGS'
+            font_size: 11
+            size_hint_x: None
+            width: 70
+            on_release: app.open_settings()
+
+
+
+<VerticalLayout@BoxLayout>
+    orientation: 'vertical'
+
+<RowTitles@BoxLayout>
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(30)
+    Button:
+        text: 'ROW'
+        size_hint_x: None
+        width: 51
+        size_hint_y: .9
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Button:
+        text: 'CATEGORY'
+        size_hint_x: None
+        width: 100
+        size_hint_y: .9
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Button:
+        text: 'ITEM'
+        size_hint_x: 17.5
+        size_hint_y: .9
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Button:
+        text: '#'
+        size_hint_x: None
+        width: 47
+        size_hint_y: .9
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+<Rows@RecycleView>
+    do_scroll_y: False
+    do_scroll_x: False
+
+    RecycleBoxLayout
+        id: rv
+        default_size: None, dp(30)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
+<SuggestionBar@BoxLayout>
+    size_hint_y: None
+    height: 30
+
+
+
+<SpinnerButton@Button>
+    size_hint_y: None
+    markup: True
+    height: dp(30)
+    color:
+        (0.400, 1, 0.400, 1) if self.text == 'ADD TO DICTIONARY' else (1, 0.560, 0.121, 1) if self.text == 'IGNORE' else (1,1,1,1)
