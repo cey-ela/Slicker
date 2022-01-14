@@ -1,0 +1,324 @@
+<ObitConfirmation>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "ARE YOU SURE THEY ARE DEAD?"
+
+            BoxLayout:
+                size_hint_y: 0.4
+                Button:
+                    text: "YES"
+                    on_release: root.do_obit()
+                Button:
+                    text: "NO"
+                    on_release: root.dont_obit()
+                    on_release: app.not_conf()
+            Label:
+                size_hint_y: 0.2
+
+
+<UnQueueGeneric>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "  Are you sure you want to \nunqueue the generic ticker?"
+
+            BoxLayout:
+                size_hint_y: 0.4
+                Button:
+                    text: "YES"
+                    on_release: root.do_unqueue()
+                Button:
+                    text: "NO"
+                    on_release: root.dont_unqueue()
+                    on_release: app.unqueue_generic()
+            Label:
+                size_hint_y: 0.2
+
+
+
+<CategoryAdded>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: app.new_cat + " added to the category list"
+
+            BoxLayout:
+                size_hint_y: 0.5
+                Button:
+                    text: "OK"
+                    on_release: root.dismiss()
+
+            Label:
+                size_hint_y: 0.2
+
+
+<CategoryDeleted>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: app.target_cat + " deleted from the category list"
+
+            BoxLayout:
+                size_hint_y: 0.5
+                Button:
+                    text: "OK"
+                    on_release: root.dismiss()
+
+            Label:
+                size_hint_y: 0.2
+
+<ClearAllConfirmation>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "ARE YOU SURE YOU WANT TO \n       REMOVE ALL ROWS?"
+
+            BoxLayout:
+                size_hint_y: 0.4
+                Button:
+                    text: "YES"
+                    on_press: app.clear_each_row()
+                    on_release: root.dismiss()
+                Button:
+                    text: "NO"
+                    on_release: root.dismiss()
+            Label:
+                size_hint_y: 0.2
+
+<DelRowConfirmation>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "ARE YOU SURE YOU WANT TO DELETE ROW?"
+
+            BoxLayout:
+                size_hint_y: 0.4
+                Button:
+                    text: "YES"
+                    on_press: app.remove_row(root.index)
+                    on_release: root.dismiss()
+                Button:
+                    text: "NO"
+                    on_release: root.dismiss()
+            Label:
+                size_hint_y: 0.2
+
+
+<MaestroReminder>
+    size_hint: None, None
+    width: 1500
+    height: 600
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: "PLEASE NOW 'UPDATE TICKER' IN MAESTRO"
+            font_size: 25
+            size_hint_y: None
+            height: 40
+        Label:
+            text:
+                "---------------------------------------------------------------------------------------------------" \
+                "---------------------------------------------------------------------------------------------------"
+            font_size: 25
+            size_hint_y: None
+            height: 10
+
+        BoxLayout:
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "1) CHANGE TO THE GPI RUNDOWN TAB  \n2) SELECT '2020_GENERIC_GMB_TICKER_CUSTOM_SQL'"
+                    font_size: 18
+                    size_hint_y: .2
+
+                Image:
+                    source: 'images\\1.PNG'
+                    size: self.texture_size
+                    size_hint_y: .8
+
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "3) CLICK THE 'UPDATE TICKER' BUTTON A COUPLE \n OF TIMES TO CONFIRM THE NEW TICKER STORIES"
+                    font_size: 18
+                    size_hint_y: .2
+
+                Image:
+                    source: 'images\\2.PNG'
+                    size: self.texture_size
+                    size_hint_y: .8
+
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            Label:
+                size_hint_x: .4
+            Button:
+                text: "OK"
+                on_release: root.dismiss()
+                size_hint_x: .2
+            Label:
+                size_hint_x: .4
+
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+
+            MCQLabelCheckBox:
+
+        Label:
+            size_hint_y: None
+            height: 5
+
+# https://stackoverflow.com/questions/48438074/kivy-touch-the-label-to-check-the-checkbox/48443383
+
+
+<MCQLabel@ButtonBehavior+Label>:
+    text_size: self.size
+    valign: 'center'
+
+<MCQLabelCheckBox@BoxLayout>:
+    BoxLayout
+        size_hint_x: .4
+        CheckBox:
+            size_hint_x: .05
+            id: cb
+            on_active: app.do_not_show_maestro_reminder()
+        MCQLabel:
+            size_hint_x: .9
+            on_press: cb._do_press()
+            text: "Do not display message for the remainder of this session"
+    Label:
+        size_hint_x: .6
+
+
+<SQLWarning>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "ERROR SENDING DATA TO SQL DATABASE \n  PLEASE CONTACT CTS IMMEDIATELY"
+
+            BoxLayout:
+                size_hint_y: 0.4
+
+                Button:
+                    text: "OK"
+                    on_release: root.dismiss()
+            Label:
+                size_hint_y: 0.2
+
+<WallWarning>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "ERROR SENDING DATA TO THE WALL \nPLEASE CONTACT CTS IMMEDIATELY"
+
+            BoxLayout:
+                size_hint_y: 0.4
+
+                Button:
+                    text: "OK"
+                    on_release: root.dismiss()
+            Label:
+                size_hint_y: 0.2
+
+
+<BackupWarning>
+    size_hint: None, None
+    width: 450
+    height: 200
+    auto_dismiss: False
+    title: ""
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text:
+                    "ERROR SENDING DATA TO EXCEL BACKUP \n   PLEASE CONTACT CTS IMMEDIATELY"
+
+            BoxLayout:
+                size_hint_y: 0.4
+
+                Button:
+                    text: "OK"
+                    on_release: root.dismiss()
+            Label:
+                size_hint_y: 0.2
